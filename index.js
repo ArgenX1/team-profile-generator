@@ -1,6 +1,5 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
-const Employee = require('./lib/Employee');
 const Intern = require('./lib/Intern');
 const Engineer = require('./lib/Engineer');
 const Manager = require('./lib/Manager');
@@ -20,12 +19,37 @@ function createTeam() {
         switch (answers.questions) {
             case 'Create Team':
                 console.log('Lets do this!');
-                // TODO: write code to build team
-
+                createManager();
                 break;
         
             default:
                 console.log('Goodbye!');
+                break;
+        }
+    })
+}
+
+function teamAddition() {
+    inquirer.prompt([
+        {
+            type: 'list',
+            name: 'addition',
+            message: 'Who do you want to add to your team?',
+            choices: ['Add Engineer','Add Intern','Create HTML']
+        }
+    ]).then(answers => {
+        switch (answers.addition) {
+            case 'Add Engineer':
+                console.log('Add Engineer');
+                createEngineer();
+                break;
+            case 'Add Intern':
+                console.log('Add Intern');
+                createIntern();
+                break;
+            
+            default:
+                fs.writeFileSync('index.html', genHTML(team));
                 break;
         }
     })
@@ -58,7 +82,7 @@ function createManager() {
        const manager = new Manager(name, id, email, officeNumber);
        team.push(manager);
        console.log(team);
-       return;
+       teamAddition();
    })     
 
 }
@@ -89,6 +113,7 @@ function createEngineer() {
        const engineer = new Engineer(name, id, email, github);
        team.push(engineer);
        console.log(team);
+       teamAddition();
    })     
 
 }
@@ -119,6 +144,7 @@ function createIntern() {
        const intern = new Intern(name, id, email, school);
        team.push(intern);
        console.log(team);
+       teamAddition();
    })     
 
 }
